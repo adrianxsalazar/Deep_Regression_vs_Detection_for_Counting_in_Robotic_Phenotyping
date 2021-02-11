@@ -115,7 +115,7 @@ project                                           #Project folder. Typically we 
 
 <h3> Running the code for faster RCNN </h3>
 
-Before explaining how to use this implementation,I should point to the detectron2
+Before explaining how to use this implementation, I should point to the detectron2
 framework. Detectron2 is a fantastic tool for object detection and segmentation.
 You can get more information about this framework in the official
 <a href="https://github.com/facebookresearch/detectron2">repository.</a>.
@@ -132,11 +132,12 @@ datasets/<name_of_your_dataset>/all/. Now, everything is ready to train our
 Faster R-CNN.
 
 
-To train the model,  we need to run the following command in our terminal in the project folder.
+To train the model,  we need to run the following command in our terminal in
+the project folder.
 
 ```
 
-$ python3 code/faster_rcnn/faster_rcnn.py
+$ python3 code/models/faster_rcnn/faster_rcnn.py
 
 ```
 
@@ -148,49 +149,79 @@ the new command will be as follows.
 
 ```
 
-$ python3 code/faster_rcnn/faster_rcnn.py -dataset "dataset A" -model_output "dataset A output"
+$ python3 code/models/faster_rcnn/faster_rcnn.py -dataset "dataset A" -model_output "dataset A output"
 
 ```
 
-The following command trains a Faster RCNN in the "dataset A". The learning rate is 0.0002 and a patience of 20. A patience of 20 means that if the model does not improve in 20 validations checks, the training will stop.
+The following command trains a Faster RCNN in the "dataset A". The learning rate
+is 0.0002 and a patience of 20. A patience of 20 means that if the model does not
+improve in 20 validations checks, the training will stop.
 
 ```
 
-$ python3 code/faster_rcnn/faster_rcnn.py -dataset "dataset A" -model_output "dataset A output" -learning_rate 0.0002 -patience 20
-
-```
-
-<h3> Testing the model </h3>
-Once we finish with training, we can evaluate our model. The python file "testing_faster_rcnn.py" contains the code to test our models.  To do so,  we only need to run this file with the corresponding commands "-model" and "-model_output". The testing uses the model located in the "model_output". We will need to use the "model_output" we indicated during the training process. The following command tests the models that we trained before.
-
-```
-
-$ python3 code/faster_rcnn/testing_faster_rcnn.py -dataset "dataset A" -model_output "dataset A output"
-
-```
-
-
-We also included an approach to choose the anchor size in the faster R-CNN region proposal network. The code clusters the bounding boxes sizes of the dataset to propose the anchor sizes. We can use the commands "-anchor_size" and "-aspect_ratios" to set the anchor size during training. I will explain more about his process in following updates of this page.
-
-The testing process outputs two files "counting_results.txt" and "detection_results.txt", which will be available in the output folder. The
-
-```
-
-project
-│    
-└───saved_models                                  #Folder where we save the models.
-    |   ...
-    └───faster_cnn                                
-        |   ...
-        └───dataset_A                             #Folder where we save the models we trained using dataset A.
-            └───results_folder
-                |   counting_restults.txt         #Folder that contains the counting measures of our model such as MAE and RMSE
-                |   detection_restults.txt        #Folder that contains the detection measures such as MaP
+$ python3 code/models/faster_rcnn/faster_rcnn.py -dataset "dataset A" -model_output "dataset A output" -learning_rate 0.0002 -patience 20
 
 
 ```
 
-<h3> Training parameters </h3>
+<h3> Running the code for the density-based models. </h3>
+Before training your density based models, make sure that you have installed
+PyTorch in your device.
+
+For training, all the implemented density-based methods require of three
+parameters; a first parameter indicating the path of a ".json" that indicates
+the location of the ground truth training images, the second parameter is another
+".json" that does the same as the previous one but indicates the location of the
+validation items, and the last element is a path indicating the folder where the
+trained models are saved. The following example trains a CSRNet model on
+a dataset called "dataset_A"
+
+```
+
+$ python code/models/CSRNet/train.py "./datasets/dataset_A/density_train_list.json"  "./datasets/dataset_A/density_val_list.json" "./saved_models/CSRNet/dataset_A/"
+
+
+```
+
+The following example trains a "CAN" model
+
+```
+
+$ python code/models/can/train.py  "./datasets/dataset_A/density_train_list.json"  "./datasets/dataset_A/density_val_list.json" "./saved_models/can/global-wheat-detection/"
+
+
+```
+
+<h3> Testing the Faster R-CNN model. </h3>
+Once we finish with the Faster R-CNN training, we can evaluate our model.
+The python file "testing_faster_rcnn.py" contains the code to test our models.
+We only need to run this file with the corresponding commands "-model" and "-model_output".
+The testing uses the model located in the "model_output".
+We will need to use the "model_output" we indicated during the training process.
+The following command tests the detection model that we trained before.
+
+```
+
+$ python3 code/models/faster_rcnn/testing_faster_rcnn.py -dataset "dataset A" -model_output "dataset A output"
+
+
+```
+
+
+<h3> Testing the density based model. </h3>
+As with the testing of the detection model, we can easily evaluate our density-based
+counting model. The following command tests the can model that we trained before.
+
+```
+
+$ python3 code/models/can/test.py -test_json "./datasets/dataset_A/density_test_list.json" -output "./saved_models/can/dataset_A/"
+
+
+```
+
+
+
+<h3> Training parameters for Faster RCNN </h3>
 
 ```
 

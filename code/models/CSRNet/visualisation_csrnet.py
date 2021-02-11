@@ -31,7 +31,7 @@ args = parser.parse_args()
 
 def main():
     global args
-
+    
     print (args.path_testing_image)
 
     transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -69,7 +69,7 @@ def main():
     plt.imshow(plt.imread(args.path_testing_image))
     plt.axis('off')
     plt.savefig("original_image.png",bbox_inches='tight')
-
+    
     f = open('results.txt','w')
     f.write("Predicted Count : " + str(int(output.detach().cpu().sum().numpy()))+ " Original Count : " + str(int(np.sum(temp_1)) + 1))
     f.close()
