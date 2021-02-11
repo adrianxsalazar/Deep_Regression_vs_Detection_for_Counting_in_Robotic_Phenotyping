@@ -9,76 +9,127 @@ Both approaches follow the same directory structure. However, the libraries and
 commands required to run them differ. This page explains how to run both
 methodologies, but for more detailed description check the following links:
 
-What can you do with this implementation?
 <ul>
  <li>Counting by detection detailed page: <a href="https://github.com/adrianxsalazar/density_based_methods_counting">Counting by detection.</a></li>
- <li>Counting by regression detailed page:<a href="https://github.com/adrianxsalazar/faster-r-cnn-implementation">Counting by regression.</a>.</li>
+ <li>Counting by regression detailed page:<a href="https://github.com/adrianxsalazar/faster-r-cnn-implementation"> Counting by regression.</a>.</li>
+</ul>
+
+What can you do with this implementation?
+<ul>
+ <li> Train object detection models with your custom datasets or with the datasets proposed in our paper.</li>
+ <li> Train counting by regression approaches with your custom datasets or with the datasets proposed in our paper.</li>
+ <li> Training and testing with few command.</li>
 </ul>
 
 
-This implementation uses the detectron2 framework. Although the detectron2 framework is relatively easy to use, this implementation simplifies some aspects that are not straightforward to implement using his framework. The main goal of this implementation is to facilitate the implementation of Faster R-CNN. So, users without much coding knowledge can easily customise this object detection tool. The rest of this repo explains how to use the implementation.
-
-### An example of the output of the detection approaches.
+</h4> An example of the output of the detection approaches. </h4>
 <p class="aligncenter">
 <img src="https://github.com/adrianxsalazar/faster-r-cnn-implementation/blob/master/readme_images/detection_sample.png" alt="detection sample">
 </p>
 
-### An example of the output of the density-based counting approaches.
+<h4> An example of the output of the density-based counting approaches. </h4>
+<p class="aligncenter">
+<img src="https://github.com/adrianxsalazar/density_based_methods_counting/blob/master/readme_images/output.png" alt="detection sample">
+</p>
 
-What can you do with this implementation?
-<ul>
- <li>Train object detection models with your custom datasets.</li>
- <li>Set up the characteristic of the model with few commands. We cover elements such as the rpn anchor size, stopping criteria, base-model used for training, etc.</li>
- <li>Test your model with just a few commands.</li>
-</ul>
-
-Before explaining how to use this implementation, I should point to the detectron2 framework. Detectron2 is a fantastic tool for object detection and segmentation.  You can get more information about this framework in the official <a href="https://github.com/facebookresearch/detectron2">repository.</a> If you want to know more about faster R-CNN, I recommend to start with the original article: "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks".
 
 <h3> Directory structure </h3>
 
-First, you need to follow the given directory structure. You can always change the code if you do not want to follow this structure. I will explain later which lines of code you need to change.
+First, you need to follow the given directory structure.
+You can always change the code if you do not want to follow this structure.
+However the commands we use will not work. I will explain later which lines of
+code you need to change in case you want.
 
 
 ```
 
-project
-│   README.md    
+project                                           #Project folder. Typically we run our code from this folder.
+│   README.md                                     #Readme of the project.
 │
 └───code                                          #Folder where we store the code.
-│   │   ...
-│   └───faster_rcnn
-│       │   faster_rcnn.py                        #faster rcnn training code.
-│       │   testing_faster_rcnn.py                #faster rcnn testing code.
-|       └───tools
-|           |   decision_anchors.py               #K-means approach to choose anchor sizes.
-|           |   plot_results_faster_rcnn.py       #Plot the results of the trained models.
-│   
+│   │
+|   └───models
+|   │   └───can                                   #Folder that contains the code to run can.
+|   │   |   │   train.py                          #File with the code to train a can model.
+|   │   |   │   test.py                           #File with the code to test a can model.
+|   |   |   |   dataset.py                        #File with the code with the data loader. We do not use this file directly.
+|   |   |   |   image.py                          #This code contains is in charge of modifying the images we use. We do not use this file directly.
+|   |   |   |   utils.py                          #Several tools we use in the training process. We do not use this file directly.
+|   |   |   |   model.py                          #The code contains the model. We do not use this file directly.
+|   |   |   
+|   |   └───CSRNet                                #Folder that contains the code to run CSRNet.
+|   │       │   train.py                          #File with the code to train a CSRNet model.
+|   │       │   test.py                           #File with the code to test a CSRNet model.
+|   |       |   dataset.py                        #File with the code with the data loader. We do not use this file directly.
+|   |       |   image.py                          #This code contains is in charge of modifying the images we use. We do not use this file directly.
+|   |       |   utils.py                          #Several tools we use in the training process. We do not use this file directly.
+|   |       |   model.py                          #The code contains the model. We do not use this file directly.
+|   |     
+│   └───faster_rcnn                               #Folder that contains the code to train and test the faster R CNN
+│   |       │   faster_rcnn.py                    #faster rcnn training code.
+│   |       │   testing_faster_rcnn.py            #faster rcnn testing code.
+|   |       └───tools
+|   |            |   decision_anchors.py          #K-means approach to choose anchor sizes.
+|   |            |   plot_results_faster_rcnn.py  #Plot the results of the trained models.
+│   |
+|   └───utils                                     #This folder contains tools to train density-based models.
+|       |   creation_density_maps.py              #Code to create the ground truth density maps.
+|       |   json_files_creator.py                 #Code to create the .json file with the path of the images we want to use for training, testing, and validation.
+|
 └───datasets                                      #Folder where we save the datasets.
 |   │   ...
 |   └───dataset_A                                 #Dataset folder. Each dataset has to have a folder.
+|       |   density_test_list.json                #.json file that contains a list of the paths of the testing images.
+|       |   density_train_list.json               #.json file that contains a list of the paths of the training images.
+|       |   density_val_list.json                 #.json file that contains a list of the paths of the validation images.
 |       |   json_test_set.json                    #COCO JSON annotation file of the testing images.
 |       |   json_train_set.json                   #COCO JSON annotation file of the training images.
 |       |   json_val_set.json                     #COCO JSON annotation file of the validation images.
-|       └───all                                   #Folder where we place the images.
-|           | img_1.png
-|           | img_2.png
+|       |
+|       └───all                                   #Folder where we place the images and the ground truth density maps.
+|           | img_1.png                           #Image we are using
+|           | img_1.h5                            #ground truth density map
+|           | img_2.png                           #""
+|           | img_2.h5                            #""
 |           | ...
 |   
 └───saved_models                                  #Folder where we save the models.
     |   ...
+    └───can                                       #Folder where we save the models as a result the can training process.
+    |   |   ...
+    |   └───dataset_A                             #Folder where we save the models we trained using dataset A.
+    |       └───best_model.pth                    #Model we get from training for can.
+    |
+    └───CSRNet
+    |   |   ...
+    |   └───dataset_A                             #Folder where we save the models we trained using CSRNet on dataset A.
+    |       └───best_model.pth                    #Model we get from training for CSRNet.
+    |
     └───faster_cnn                                
         |   ...
-        └───dataset_A                             #Folder where we save the models we trained using dataset A.
-            └───best_model.pth                    #Model we get from training.
+        └───dataset_A                             #Folder where we save the models we trained using faster RCNN on dataset A.
+            └───best_model.pth                    #Model we get from training with faster RCNN.
+
 
 ```
 
+<h3> Running the code for faster RCNN </h3>
 
-First, you need to follow the given directory structure. You can always change the code if you do not want to follow this structure. I will explain later which lines of code you need to change.
+Before explaining how to use this implementation,I should point to the detectron2
+framework. Detectron2 is a fantastic tool for object detection and segmentation.
+You can get more information about this framework in the official
+<a href="https://github.com/facebookresearch/detectron2">repository.</a>.
+I recommend to check their website to install the library in your device.
+If you want to know more about faster R-CNN, I recommend to start with the
+original article:
+"Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks".
 
-
-<h3> Running the code </h3>
-Once you have this structure, place the training, testing, and validation coco JSON files in the datasets/<name_of_your_dataset>/ directory. Then you only have to rename them as "json_train_set.json", "json_test_set.json", and "json_val_set.json". Then, copy all the dataset images under the directory datasets/<name_of_your_dataset>/all/. Now, everything is ready to train our Faster R-CNN.
+Once the directory is ready, place the training, testing, and validation coco JSON
+files in the datasets/<name_of_your_dataset>/ directory.
+Then you only have to rename them as "json_train_set.json", "json_test_set.json",
+and "json_val_set.json". Then, copy all the dataset images under the directory
+datasets/<name_of_your_dataset>/all/. Now, everything is ready to train our
+Faster R-CNN.
 
 
 To train the model,  we need to run the following command in our terminal in the project folder.
@@ -89,17 +140,17 @@ $ python3 code/faster_rcnn/faster_rcnn.py
 
 ```
 
-
-This command will not work. We need to indicate which dataset we want to use and the folder's name to store the trained models. We can register these elements with the commands "-dataset" and "-model_output". If our dataset name is "dataset A" and the folder's name where we want to store the model is "dataset A output", the new command will be as follows.
-
+This command will not work. We need to indicate which dataset we want to use and
+the folder's name to store the trained models. We can register these elements
+with the commands "-dataset" and "-model_output". If our dataset name is "dataset A"
+and the folder's name where we want to store the model is "dataset A output",
+the new command will be as follows.
 
 ```
 
 $ python3 code/faster_rcnn/faster_rcnn.py -dataset "dataset A" -model_output "dataset A output"
 
 ```
-
-Now, you should be able to train your model. Besides the "-dataset" and "-model_output" commands, there are multiple commands to customise your models. Some useful commands are "-model" which allows us to choose a feature extractor from the detectron2 model zoo and "-learning_rate" to select the learning rate.  The command "-number_classes" indicates to our model how many classes are in the dataset,  "-patience" shows how many iterations without improvement in the validation loss we allow, and "evaluation_period" which indicates how frequently we evaluate our models in the validation set.
 
 The following command trains a Faster RCNN in the "dataset A". The learning rate is 0.0002 and a patience of 20. A patience of 20 means that if the model does not improve in 20 validations checks, the training will stop.
 
