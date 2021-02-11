@@ -1,12 +1,29 @@
-# faster-r-cnn-implementation
-Faster R-CNN implementation.
+# Deep Regression versus Detection for Counting in Robotic Phenotyping Code.
 
-This repository contains a Faster R-CNN implementation. This implementation uses the detectron2 framework. Although the detectron2 framework is relatively easy to use, this implementation simplifies some aspects that are not straightforward to implement using his framework. The main goal of this implementation is to facilitate the implementation of Faster R-CNN. So, users without much coding knowledge can easily customise this object detection tool. The rest of this repo explains how to use the implementation.
+This repository contains the implementation of the paper
+"Deep Regression versus Detection for Counting in Robotic Phenotyping."
+This implementation contains the code to run the two kinds of approaches we use in
+our paper; counting by regression and counting by detection.
 
+Both approaches follow the same directory structure. However, the libraries and
+commands required to run them differ. This page explains how to run both
+methodologies, but for more detailed description check the following links:
+
+What can you do with this implementation?
+<ul>
+ <li>Counting by detection detailed page: <a href="https://github.com/adrianxsalazar/density_based_methods_counting">Counting by detection.</a></li>
+ <li>Counting by regression detailed page:<a href="https://github.com/adrianxsalazar/faster-r-cnn-implementation">Counting by regression.</a>.</li>
+</ul>
+
+
+This implementation uses the detectron2 framework. Although the detectron2 framework is relatively easy to use, this implementation simplifies some aspects that are not straightforward to implement using his framework. The main goal of this implementation is to facilitate the implementation of Faster R-CNN. So, users without much coding knowledge can easily customise this object detection tool. The rest of this repo explains how to use the implementation.
+
+### An example of the output of the detection approaches.
 <p class="aligncenter">
 <img src="https://github.com/adrianxsalazar/faster-r-cnn-implementation/blob/master/readme_images/detection_sample.png" alt="detection sample">
 </p>
 
+### An example of the output of the density-based counting approaches.
 
 What can you do with this implementation?
 <ul>
