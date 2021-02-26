@@ -10,9 +10,11 @@ commands required to run them differ. This page explains how to run both
 methodologies, but for more detailed description check the following links:
 
 <ul>
- <li>Counting by detection detailed page: <a href="https://github.com/adrianxsalazar/density_based_methods_counting">Counting by detection.</a></li>
- <li>Counting by regression detailed page:<a href="https://github.com/adrianxsalazar/faster-r-cnn-implementation"> Counting by regression.</a>.</li>
+ <li>Counting by detection detailed page: <a href="https://github.com/adrianxsalazar/faster-r-cnn-implementation">Counting by detection.</a></li>
+ <li>Counting by regression detailed page:<a href="https://github.com/adrianxsalazar/density_based_methods_counting"> Counting by regression.</a>.</li>
 </ul>
+
+
 
 What can you do with this implementation?
 <ul>
